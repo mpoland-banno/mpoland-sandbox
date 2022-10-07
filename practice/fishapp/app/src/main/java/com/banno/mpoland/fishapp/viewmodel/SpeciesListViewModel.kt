@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.banno.mpoland.fishapp.repository.SpeciesListRepository
-import com.banno.mpoland.fishapp.model.SpeciesSlim
+import com.banno.mpoland.fishapp.model.Species
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -24,7 +24,7 @@ class SpeciesListViewModel(private val repository: SpeciesListRepository) : View
     }
 
     // TODO: push the cached list o' fish into the repository
-    private val speciesList = ArrayList<SpeciesSlim>()
+    private val speciesList = ArrayList<Species>()
 
     val state = mutableStateOf(SpeciesListUiStateHolder())
 

@@ -6,7 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.runtime.*
-import com.banno.mpoland.fishapp.model.SpeciesSlim
+import com.banno.mpoland.fishapp.model.Species
 import com.banno.mpoland.fishapp.network.api.FishApiService
 import com.banno.mpoland.fishapp.repository.SpeciesListRepository
 import com.banno.mpoland.fishapp.ui.SpeciesListScreen
@@ -44,7 +44,7 @@ class MainActivity : ComponentActivity(), DIAware {
         speciesListViewModel.loadSpeciesList()
     }
 
-    private fun onClickSpeciesRow(species: SpeciesSlim) {
+    private fun onClickSpeciesRow(species: Species) {
         Toast.makeText(this, "Fish!!!! - ${species.speciesName}\n${species.path}", Toast.LENGTH_SHORT).show()
     }
 

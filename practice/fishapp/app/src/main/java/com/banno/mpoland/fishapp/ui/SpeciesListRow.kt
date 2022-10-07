@@ -15,21 +15,21 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.banno.mpoland.fishapp.model.SpeciesImageData
-import com.banno.mpoland.fishapp.model.SpeciesSlim
+import com.banno.mpoland.fishapp.model.Species
 
 
-typealias OnClickSpeciesRowFunc = (SpeciesSlim)->Unit
+typealias OnClickSpeciesRowFunc = (Species)->Unit
 
-class SpeciesListRowPreviewParameter : PreviewParameterProvider<SpeciesSlim> {
-    override val values: Sequence<SpeciesSlim> = sequenceOf(
-        SpeciesSlim("Fish!", "Feeeeeeesh!!", "", SpeciesImageData.DefaultImageData)
+class SpeciesListRowPreviewParameter : PreviewParameterProvider<Species> {
+    override val values: Sequence<Species> = sequenceOf(
+        Species("Fish!", "Feeeeeeesh!!", "", SpeciesImageData.DefaultImageData)
     )
 }
 
 @Preview
 @Composable
 fun SpeciesListRow(
-    @PreviewParameter(SpeciesListRowPreviewParameter::class) species: SpeciesSlim,
+    @PreviewParameter(SpeciesListRowPreviewParameter::class) species: Species,
     onClickSpeciesRow:OnClickSpeciesRowFunc = {}
 ) {
     Row(

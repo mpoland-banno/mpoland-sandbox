@@ -1,6 +1,6 @@
 package com.banno.mpoland.fishapp.model
 
-data class SpeciesSlim(
+data class Species(
     val speciesName:String,
     val scientificName:String,
     val path: String,

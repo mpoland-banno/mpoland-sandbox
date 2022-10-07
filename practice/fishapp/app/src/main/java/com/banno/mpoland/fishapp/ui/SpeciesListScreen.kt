@@ -11,7 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import com.banno.mpoland.fishapp.model.SpeciesSlim
+import com.banno.mpoland.fishapp.model.Species
 import com.banno.mpoland.fishapp.ui.preview.SpeciesListUiStateHolderPreviewParameter
 import com.banno.mpoland.fishapp.viewmodel.SpeciesListUiStateHolder
 
@@ -21,7 +21,7 @@ import com.banno.mpoland.fishapp.viewmodel.SpeciesListUiStateHolder
 fun SpeciesListScreen(
     @PreviewParameter(SpeciesListUiStateHolderPreviewParameter::class) state: SpeciesListUiStateHolder,
     onSearchValueChange: (String)->Unit = {},
-    onClickSpeciesRowFunc: (SpeciesSlim)->Unit = {}
+    onClickSpeciesRowFunc: (Species)->Unit = {}
 ) {
     Scaffold(
         topBar = { TopBar(state, onSearchValueChange) }

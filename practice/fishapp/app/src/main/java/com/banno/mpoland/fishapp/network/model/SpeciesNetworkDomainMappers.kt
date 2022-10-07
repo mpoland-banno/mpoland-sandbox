@@ -2,10 +2,10 @@ package com.banno.mpoland.fishapp.network.model
 
 import com.banno.mpoland.fishapp.model.SpeciesDetails
 import com.banno.mpoland.fishapp.model.SpeciesImageData
-import com.banno.mpoland.fishapp.model.SpeciesSlim
+import com.banno.mpoland.fishapp.model.Species
 
-fun SpeciesNetworkModel.toDomain() : SpeciesSlim {
-    return SpeciesSlim(
+fun SpeciesNetworkModel.toDomain() : Species {
+    return Species(
         speciesName,
         scientificName,
         path,

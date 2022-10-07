@@ -7,12 +7,12 @@ import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.banno.mpoland.fishapp.model.SpeciesSlim
+import com.banno.mpoland.fishapp.model.Species
 import com.banno.mpoland.fishapp.viewmodel.SpeciesListUiStateHolder
 
 
 @Composable
-fun SpeciesList(state: SpeciesListUiStateHolder, onClickSpeciesRow:(SpeciesSlim)->Unit = {}) {
+fun SpeciesList(state: SpeciesListUiStateHolder, onClickSpeciesRow:(Species)->Unit = {}) {
     LazyColumn(modifier = Modifier.fillMaxHeight()) {
         itemsIndexed(items=state.speciesList) { index, item ->
             SpeciesListRow(item, onClickSpeciesRow)
