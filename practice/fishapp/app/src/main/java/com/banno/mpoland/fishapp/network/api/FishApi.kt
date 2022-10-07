@@ -1,7 +1,7 @@
 package com.banno.mpoland.fishapp.network.api
 
 import com.banno.mpoland.fishapp.network.model.SpeciesDetailsNetworkModel
-import com.banno.mpoland.fishapp.network.model.SpeciesSlimNetworkModel
+import com.banno.mpoland.fishapp.network.model.SpeciesNetworkModel
 
 interface FishApiService {
     companion object {
@@ -17,7 +17,7 @@ interface FishApiService {
     suspend fun getSpeciesDetails(path: String) : SpeciesDetailsApiResponse
 }
 
-data class SpeciesApiResponse(val speciesList:List<SpeciesSlimNetworkModel>)
+data class SpeciesApiResponse(val speciesList:List<SpeciesNetworkModel>)
 
 data class SpeciesDetailsApiResponse(val species:List<SpeciesDetailsNetworkModel>)
 

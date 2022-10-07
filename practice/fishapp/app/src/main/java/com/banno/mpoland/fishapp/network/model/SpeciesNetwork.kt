@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class SpeciesSlimNetworkModel(
+data class SpeciesNetworkModel(
     @SerialName("Species Name") val speciesName:String,
     @SerialName("Scientific Name") val scientificName:String,
     @SerialName("Path") val path: String,

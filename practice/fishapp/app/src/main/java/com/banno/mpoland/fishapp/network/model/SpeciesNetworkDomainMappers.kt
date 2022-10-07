@@ -4,7 +4,7 @@ import com.banno.mpoland.fishapp.model.SpeciesDetails
 import com.banno.mpoland.fishapp.model.SpeciesImageData
 import com.banno.mpoland.fishapp.model.SpeciesSlim
 
-fun SpeciesSlimNetworkModel.toDomain() : SpeciesSlim {
+fun SpeciesNetworkModel.toDomain() : SpeciesSlim {
     return SpeciesSlim(
         speciesName,
         scientificName,
