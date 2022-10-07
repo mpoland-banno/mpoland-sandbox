@@ -7,11 +7,10 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.runtime.*
 import com.banno.mpoland.fishapp.model.Species
-import com.banno.mpoland.fishapp.network.api.FishApiService
-import com.banno.mpoland.fishapp.repository.SpeciesListRepository
 import com.banno.mpoland.fishapp.ui.SpeciesListScreen
 import com.banno.mpoland.fishapp.ui.theme.FishAppTheme
 import com.banno.mpoland.fishapp.viewmodel.SpeciesListViewModel
+import com.banno.mpoland.fishapp.viewmodel.SpeciesListViewModelFactory
 import org.kodein.di.DI
 import org.kodein.di.DIAware
 import org.kodein.di.android.closestDI
@@ -21,10 +20,10 @@ import org.kodein.di.instance
 class MainActivity : ComponentActivity(), DIAware {
     override val di: DI by closestDI()
 
-    private val fishApi: FishApiService by instance()
+    private val vmFactory:SpeciesListViewModelFactory by instance()
 
     private val speciesListViewModel: SpeciesListViewModel by viewModels {
-        SpeciesListViewModel.Factory.create(SpeciesListRepository(fishApi))
+        vmFactory.create()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

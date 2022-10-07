@@ -12,16 +12,18 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class SpeciesListViewModel(private val repository: SpeciesListRepository) : ViewModel() {
-    object Factory {
-        fun create(repository: SpeciesListRepository) : ViewModelProvider.Factory  {
-            return viewModelFactory {
-                initializer {
-                    SpeciesListViewModel(repository)
-                }
+
+class SpeciesListViewModelFactory(private val repository: SpeciesListRepository) {
+    fun create() :  ViewModelProvider.Factory {
+        return viewModelFactory {
+            initializer {
+                SpeciesListViewModel(repository)
             }
         }
     }
+}
+
+class SpeciesListViewModel(private val repository: SpeciesListRepository) : ViewModel() {
 
     // TODO: push the cached list o' fish into the repository
     private val speciesList = ArrayList<Species>()
