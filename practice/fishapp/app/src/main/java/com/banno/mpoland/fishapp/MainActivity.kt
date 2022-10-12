@@ -6,7 +6,14 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
+import androidx.navigation.NavHost
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.banno.mpoland.fishapp.model.Species
+import com.banno.mpoland.fishapp.ui.FishDetailsScreen
 import com.banno.mpoland.fishapp.ui.SpeciesListScreen
 import com.banno.mpoland.fishapp.ui.theme.FishAppTheme
 import com.banno.mpoland.fishapp.viewmodel.SpeciesListViewModel
@@ -32,8 +39,17 @@ class MainActivity : ComponentActivity(), DIAware {
         setContent {
             val state by remember { speciesListViewModel.state }
 
+            val navController = rememberNavController()
+
             FishAppTheme {
-                SpeciesListScreen(state, ::onSearchFilterValueChange, ::onClickSpeciesRow)
+                NavHost(
+                    modifier = Modifier,
+                    navController = navController,
+                    startDestination = "speciesListScreen"
+                ) {
+                    composable("speciesListScreen") {  SpeciesListScreen(state, ::onSearchFilterValueChange, {navController.navigate("speciesDetailsScreen")})  }
+                    composable("speciesDetailsScreen") { FishDetailsScreen() }
+                }
             }
         }
     }
@@ -43,12 +59,21 @@ class MainActivity : ComponentActivity(), DIAware {
         speciesListViewModel.loadSpeciesList()
     }
 
+    /*
     private fun onClickSpeciesRow(species: Species) {
         Toast.makeText(this, "Fish!!!! - ${species.speciesName}\n${species.path}", Toast.LENGTH_SHORT).show()
     }
+    */
 
     private fun onSearchFilterValueChange(value:String) {
         speciesListViewModel.applySearchFilter(value)
     }
 
 }
+
+
+
+
+
+
+
