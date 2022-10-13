@@ -7,12 +7,10 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
-import androidx.navigation.NavHost
+import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.banno.mpoland.fishapp.model.Species
 import com.banno.mpoland.fishapp.repository.SpeciesListRepository
 import com.banno.mpoland.fishapp.ui.FishDetailsScreen
@@ -39,33 +37,39 @@ class MainActivity : ComponentActivity(), DIAware {
 
             FishAppTheme {
                 NavHost(
-                    modifier = Modifier,
                     navController = navController,
-                    startDestination = "speciesListScreen"
+                    startDestination = "speciesRoot"
                 ) {
-
-                    composable("speciesListScreen") {
-                        SpeciesListScreen(
-                            viewModelFactory = SpeciesListViewModelFactory(repository).create(),
-                            onNavigateToDetailsScreen = { species ->
-                                navController.navigate("speciesDetailsScreen?speciesPath=${species.path}")
-                            }
-                        )
-                    }
-
-                    composable(
-                        route = "speciesDetailsScreen?speciesPath={speciesPath}",
-                        arguments = listOf(navArgument("speciesPath") { nullable = true })
-                    ) { backStackEntry ->
-                        backStackEntry.arguments?.getString("speciesPath")?.let { path ->
-                            FishDetailsScreen(
-                                speciesPath = path
-                            )
-                        }
-
-                    }
-
+                    speciesGraph(navController, repository)
                 }
+            }
+        }
+        
+    }
+
+}
+
+
+fun NavGraphBuilder.speciesGraph(navController: NavController, repository:SpeciesListRepository) {
+    navigation(startDestination = "speciesListScreen", route = "speciesRoot") {
+
+        composable("speciesListScreen") {
+            SpeciesListScreen(
+                viewModelFactory = SpeciesListViewModelFactory(repository).create(),
+                onNavigateToDetailsScreen = { species ->
+                    navController.navigate("speciesDetailsScreen?speciesPath=${species.path}")
+                }
+            )
+        }
+
+        composable(
+            route = "speciesDetailsScreen?speciesPath={speciesPath}",
+            arguments = listOf(navArgument("speciesPath") { nullable = true })
+        ) { backStackEntry ->
+            backStackEntry.arguments?.getString("speciesPath")?.let { path ->
+                FishDetailsScreen(
+                    speciesPath = path
+                )
             }
         }
     }
