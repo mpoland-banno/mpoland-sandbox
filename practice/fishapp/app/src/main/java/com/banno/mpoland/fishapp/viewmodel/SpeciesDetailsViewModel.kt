@@ -19,6 +19,5 @@ class SpeciesDetailsViewModelFactory(private val repository: SpeciesListReposito
 
 
 class SpeciesDetailsViewModel(repository: SpeciesListRepository) : ViewModel() {
-
-
+    //todo: do
 }

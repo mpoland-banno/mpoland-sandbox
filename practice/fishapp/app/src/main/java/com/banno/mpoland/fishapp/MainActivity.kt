@@ -21,7 +21,6 @@ import org.kodein.di.instance
 
 class MainActivity : ComponentActivity(), DIAware {
     override val di: DI by closestDI()
-
     private val repository: SpeciesListRepository by instance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,7 +44,6 @@ class MainActivity : ComponentActivity(), DIAware {
 
 fun NavGraphBuilder.speciesGraph(navController: NavController, repository:SpeciesListRepository) {
     navigation(startDestination = "speciesListScreen", route = "speciesRoot") {
-
         composable("speciesListScreen") {
             SpeciesListScreen(
                 viewModelFactory = SpeciesListViewModelFactory(repository).create(),
@@ -54,7 +52,6 @@ fun NavGraphBuilder.speciesGraph(navController: NavController, repository:Specie
                 }
             )
         }
-
         composable(
             route = "speciesDetailsScreen?speciesName={speciesName}&speciesPath={speciesPath}",
             arguments = listOf(
@@ -70,13 +67,5 @@ fun NavGraphBuilder.speciesGraph(navController: NavController, repository:Specie
                 )
             }
         }
-
     }
 }
-
-
-
-
-
-
-

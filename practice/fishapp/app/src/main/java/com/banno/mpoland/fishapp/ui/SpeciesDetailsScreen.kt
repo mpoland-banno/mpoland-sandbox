@@ -5,12 +5,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.banno.mpoland.fishapp.repository.SpeciesListRepository
 import com.banno.mpoland.fishapp.viewmodel.SpeciesDetailsViewModel
 
 
@@ -37,7 +35,7 @@ fun SpeciesDetailsContent(
 ) {
     Scaffold(
         topBar = {
-            Column() {
+            Column {
                 FishAppTitleBar(speciesName)
             }
         }

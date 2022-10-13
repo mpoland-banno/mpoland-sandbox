@@ -19,7 +19,6 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.banno.mpoland.fishapp.model.Species
 import com.banno.mpoland.fishapp.model.SpeciesImageData
-import com.banno.mpoland.fishapp.viewmodel.SpeciesListUiStateHolder
 
 
 @Composable
