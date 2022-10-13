@@ -1,15 +1,17 @@
 package com.banno.mpoland.fishapp
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
-import androidx.compose.runtime.*
-import com.banno.mpoland.fishapp.model.Species
+import androidx.navigation.*
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.banno.mpoland.fishapp.repository.SpeciesListRepository
+import com.banno.mpoland.fishapp.ui.SpeciesDetailsScreen
 import com.banno.mpoland.fishapp.ui.SpeciesListScreen
 import com.banno.mpoland.fishapp.ui.theme.FishAppTheme
-import com.banno.mpoland.fishapp.viewmodel.SpeciesListViewModel
+import com.banno.mpoland.fishapp.viewmodel.SpeciesDetailsViewModelFactory
 import com.banno.mpoland.fishapp.viewmodel.SpeciesListViewModelFactory
 import org.kodein.di.DI
 import org.kodein.di.DIAware
@@ -19,36 +21,51 @@ import org.kodein.di.instance
 
 class MainActivity : ComponentActivity(), DIAware {
     override val di: DI by closestDI()
-
-    private val vmFactory:SpeciesListViewModelFactory by instance()
-
-    private val speciesListViewModel: SpeciesListViewModel by viewModels {
-        vmFactory.create()
-    }
+    private val repository: SpeciesListRepository by instance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
-            val state by remember { speciesListViewModel.state }
+            val navController = rememberNavController()
 
             FishAppTheme {
-                SpeciesListScreen(state, ::onSearchFilterValueChange, ::onClickSpeciesRow)
+                NavHost(
+                    navController = navController,
+                    startDestination = "speciesRoot"
+                ) {
+                    speciesGraph(navController, repository)
+                }
             }
         }
     }
+}
 
-    override fun onResume() {
-        super.onResume()
-        speciesListViewModel.loadSpeciesList()
+
+fun NavGraphBuilder.speciesGraph(navController: NavController, repository:SpeciesListRepository) {
+    navigation(startDestination = "speciesListScreen", route = "speciesRoot") {
+        composable("speciesListScreen") {
+            SpeciesListScreen(
+                viewModelFactory = SpeciesListViewModelFactory(repository).create(),
+                onNavigateToDetailsScreen = { species ->
+                    navController.navigate("speciesDetailsScreen?speciesName=${species.speciesName}&speciesPath=${species.path}")
+                }
+            )
+        }
+        composable(
+            route = "speciesDetailsScreen?speciesName={speciesName}&speciesPath={speciesPath}",
+            arguments = listOf(
+                navArgument("speciesName") { type = NavType.StringType },
+                navArgument("speciesPath") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            backStackEntry.arguments?.getString("speciesPath")?.let { path ->
+                SpeciesDetailsScreen(
+                    viewModelFactory = SpeciesDetailsViewModelFactory(repository).create(),
+                    speciesName = backStackEntry.arguments?.getString("speciesName") ?: "",
+                    speciesPath = path
+                )
+            }
+        }
     }
-
-    private fun onClickSpeciesRow(species: Species) {
-        Toast.makeText(this, "Fish!!!! - ${species.speciesName}\n${species.path}", Toast.LENGTH_SHORT).show()
-    }
-
-    private fun onSearchFilterValueChange(value:String) {
-        speciesListViewModel.applySearchFilter(value)
-    }
-
 }

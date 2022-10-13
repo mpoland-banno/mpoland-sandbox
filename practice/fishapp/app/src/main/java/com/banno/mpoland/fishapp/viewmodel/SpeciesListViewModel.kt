@@ -24,13 +24,15 @@ class SpeciesListViewModelFactory(private val repository: SpeciesListRepository)
 }
 
 class SpeciesListViewModel(private val repository: SpeciesListRepository) : ViewModel() {
-
     // TODO: push the cached list o' fish into the repository
     private val speciesList = ArrayList<Species>()
-
     val state = mutableStateOf(SpeciesListUiStateHolder())
 
-    fun loadSpeciesList() {
+    init {
+        loadSpeciesList()
+    }
+
+    private fun loadSpeciesList() {
         viewModelScope.launch {
             state.value = state.value.copy(isLoading = true)
             speciesList.clear()
@@ -52,5 +54,11 @@ class SpeciesListViewModel(private val repository: SpeciesListRepository) : View
             searchFilter = searchFilter
         )
     }
-
 }
+
+
+data class SpeciesListUiStateHolder(
+    val speciesList: List<Species> = emptyList(),
+    val searchFilter: String = "",
+    val isLoading: Boolean = false
+)

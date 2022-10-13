@@ -9,7 +9,7 @@ import org.kodein.di.bindSingleton
 
 fun ktorNetworkModule() = DI.Module("ktor-network-module") {
     bindSingleton {
-        HttpClient() {
+        HttpClient {
             install(ContentNegotiation) {
                 json(Json {
                     prettyPrint = true
