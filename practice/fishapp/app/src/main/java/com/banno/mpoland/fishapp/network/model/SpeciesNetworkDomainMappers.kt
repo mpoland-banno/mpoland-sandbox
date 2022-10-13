@@ -19,7 +19,8 @@ fun SpeciesDetailsNetworkModel.toDomain() : SpeciesDetails {
         scientificName,
         path,
         speciesIllustrationPhoto?.toDomain() ?: SpeciesImageData.DefaultImageData,
-        fisheryManagementDisplayText ?: ""
+        physicalDescription,
+        biology
     )
 }
 

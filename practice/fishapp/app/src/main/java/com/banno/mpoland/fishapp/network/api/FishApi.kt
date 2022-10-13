@@ -10,7 +10,7 @@ interface FishApiService {
 
     object Endpoints {
         fun getSpeciesList() = "${BASE_API_URL}/species"
-        fun getSpeciesDetails(path: String) = "${BASE_API_URL}/${path}"
+        fun getSpeciesDetails(path: String) = "${BASE_API_URL}${path}"
     }
 
     suspend fun getSpeciesList() : SpeciesApiResponse
@@ -19,7 +19,7 @@ interface FishApiService {
 
 data class SpeciesApiResponse(val speciesList:List<SpeciesNetworkModel>)
 
-data class SpeciesDetailsApiResponse(val species:List<SpeciesDetailsNetworkModel>)
+data class SpeciesDetailsApiResponse(val speciesList:List<SpeciesDetailsNetworkModel>)
 
 
 

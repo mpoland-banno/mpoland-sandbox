@@ -41,7 +41,7 @@ data class SpeciesDetailsNetworkModel(
     @SerialName("Fishing Rate") val fishingRate:String?,
     @SerialName("Harvest") val harvest:String?,
     @SerialName("Harvest Type") val harvestType:String?,
-    @SerialName("HealthBenefits") val healthBenefits:String?,
+    @SerialName("Health Benefits") val healthBenefits:String?,
     @SerialName("Physical Description") val physicalDescription:String?,
     @SerialName("Production") val production:String?,
     @SerialName("Protein") val protein:String?,

@@ -6,10 +6,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.banno.mpoland.fishapp.viewmodel.SpeciesDetailsViewModel
+
 
 
 @Composable
@@ -24,6 +26,7 @@ fun SpeciesDetailsScreen(
 
     SpeciesDetailsContent(viewModel, speciesName)
 
+    viewModel.loadSpeciesDetails(speciesPath)
 }
 
 
@@ -33,6 +36,11 @@ fun SpeciesDetailsContent(
     viewModel: SpeciesDetailsViewModel,
     speciesName: String
 ) {
+
+    //val state = remember { viewModel.state }
+
+    //state.value
+
     Scaffold(
         topBar = {
             Column {
@@ -44,6 +52,10 @@ fun SpeciesDetailsContent(
             .padding(padding)
             .fillMaxSize(),
         ) {
+
+
+
+
 
         }
     }

@@ -1,19 +1,20 @@
 package com.banno.mpoland.fishapp.model
 
 data class Species(
-    val speciesName:String,
-    val scientificName:String,
+    val speciesName: String,
+    val scientificName: String,
     val path: String,
     val speciesIllustrationPhoto: SpeciesImageData
 )
 
 // TODO: flesh out as i bulid the detials screen
 data class SpeciesDetails(
-    val speciesName:String,
-    val scientificName:String,
+    val speciesName: String,
+    val scientificName: String,
     val path: String,
     val speciesIllustrationPhoto: SpeciesImageData?,
-    val fisheryManagementDisplayText:String?,
+    val physicalDescription: String?,
+    val biology: String?
 )
 
 data class SpeciesImageData(val src:String, val alt:String, val title:String) {
