@@ -7,30 +7,51 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.banno.mpoland.fishapp.model.Species
-import com.banno.mpoland.fishapp.ui.preview.SpeciesListUiStateHolderPreviewParameter
 import com.banno.mpoland.fishapp.viewmodel.SpeciesListUiStateHolder
+import com.banno.mpoland.fishapp.viewmodel.SpeciesListViewModel
 
 
-@Preview
 @Composable
 fun SpeciesListScreen(
-    @PreviewParameter(SpeciesListUiStateHolderPreviewParameter::class) state: SpeciesListUiStateHolder,
-    onSearchValueChange: (String)->Unit = {},
-    onClickSpeciesRowFunc: (Species)->Unit = {}
+    viewModelFactory: ViewModelProvider.Factory,
+    onNavigateToDetailsScreen:(Species)->Unit = {}
+)  {
+    val viewModel: SpeciesListViewModel = viewModel(
+        factory = viewModelFactory
+    )
+
+    SpeciesListScreenContent(viewModel, onNavigateToDetailsScreen)
+}
+
+
+@Composable
+fun SpeciesListScreenContent(
+    viewModel: SpeciesListViewModel,
+    onNavigateToDetailsScreen:(Species)->Unit = {}
 ) {
+
+    val state = remember { viewModel.state }.value
+
     Scaffold(
-        topBar = { TopBar(state, onSearchValueChange) }
+        topBar = {
+            Column() {
+                FishAppTitleBar()
+                SearchView(state, viewModel::applySearchFilter)
+            }
+        }
     ) { padding ->
         Box(
             modifier = Modifier
                 .padding(padding)
                 .fillMaxSize(),
         ) {
+
             when {
                 state.isLoading -> {
                     SpeciesListLoadingView()
@@ -39,23 +60,14 @@ fun SpeciesListScreen(
                     SpeciesListEmptyView()
                 }
                 else -> {
-                    SpeciesList(state, onClickSpeciesRowFunc)
+                    SpeciesList(state, onNavigateToDetailsScreen)
                 }
             }
+
         }
     }
 }
 
-
-@Composable
-fun TopBar(state: SpeciesListUiStateHolder, onSearchValueChange:(String)->Unit={}) {
-    Column {
-        TopAppBar(
-            title={ Text("Fish App") }
-        )
-        SearchView(state, onSearchValueChange)
-    }
-}
 
 
 @Composable
@@ -98,3 +110,6 @@ fun SpeciesListLoadingView() {
         CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
     }
 }
+
+
+

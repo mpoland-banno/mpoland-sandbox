@@ -12,7 +12,9 @@ import androidx.navigation.NavHost
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.banno.mpoland.fishapp.model.Species
+import com.banno.mpoland.fishapp.repository.SpeciesListRepository
 import com.banno.mpoland.fishapp.ui.FishDetailsScreen
 import com.banno.mpoland.fishapp.ui.SpeciesListScreen
 import com.banno.mpoland.fishapp.ui.theme.FishAppTheme
@@ -27,18 +29,12 @@ import org.kodein.di.instance
 class MainActivity : ComponentActivity(), DIAware {
     override val di: DI by closestDI()
 
-    private val vmFactory:SpeciesListViewModelFactory by instance()
-
-    private val speciesListViewModel: SpeciesListViewModel by viewModels {
-        vmFactory.create()
-    }
+    private val repository: SpeciesListRepository by instance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
-            val state by remember { speciesListViewModel.state }
-
             val navController = rememberNavController()
 
             FishAppTheme {
@@ -47,26 +43,31 @@ class MainActivity : ComponentActivity(), DIAware {
                     navController = navController,
                     startDestination = "speciesListScreen"
                 ) {
-                    composable("speciesListScreen") {  SpeciesListScreen(state, ::onSearchFilterValueChange, {navController.navigate("speciesDetailsScreen")})  }
-                    composable("speciesDetailsScreen") { FishDetailsScreen() }
+
+                    composable("speciesListScreen") {
+                        SpeciesListScreen(
+                            viewModelFactory = SpeciesListViewModelFactory(repository).create(),
+                            onNavigateToDetailsScreen = { species ->
+                                navController.navigate("speciesDetailsScreen?speciesPath=${species.path}")
+                            }
+                        )
+                    }
+
+                    composable(
+                        route = "speciesDetailsScreen?speciesPath={speciesPath}",
+                        arguments = listOf(navArgument("speciesPath") { nullable = true })
+                    ) { backStackEntry ->
+                        backStackEntry.arguments?.getString("speciesPath")?.let { path ->
+                            FishDetailsScreen(
+                                speciesPath = path
+                            )
+                        }
+
+                    }
+
                 }
             }
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        speciesListViewModel.loadSpeciesList()
-    }
-
-    /*
-    private fun onClickSpeciesRow(species: Species) {
-        Toast.makeText(this, "Fish!!!! - ${species.speciesName}\n${species.path}", Toast.LENGTH_SHORT).show()
-    }
-    */
-
-    private fun onSearchFilterValueChange(value:String) {
-        speciesListViewModel.applySearchFilter(value)
     }
 
 }
