@@ -37,11 +37,11 @@ fun SpeciesListScreenContent(
 ) {
 
     val state = remember { viewModel.state }.value
-
+    
     Scaffold(
         topBar = {
             Column() {
-                FishAppTitleBar()
+                FishAppTitleBar("Fish App")
                 SearchView(state, viewModel::applySearchFilter)
             }
         }
@@ -60,7 +60,7 @@ fun SpeciesListScreenContent(
                     SpeciesListEmptyView()
                 }
                 else -> {
-                    SpeciesList(state, onNavigateToDetailsScreen)
+                    SpeciesList(state.speciesList, onNavigateToDetailsScreen)
                 }
             }
 

@@ -1,22 +1,17 @@
 package com.banno.mpoland.fishapp
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
-import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
 import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.banno.mpoland.fishapp.model.Species
 import com.banno.mpoland.fishapp.repository.SpeciesListRepository
-import com.banno.mpoland.fishapp.ui.FishDetailsScreen
+import com.banno.mpoland.fishapp.ui.SpeciesDetailsScreen
 import com.banno.mpoland.fishapp.ui.SpeciesListScreen
 import com.banno.mpoland.fishapp.ui.theme.FishAppTheme
-import com.banno.mpoland.fishapp.viewmodel.SpeciesListViewModel
+import com.banno.mpoland.fishapp.viewmodel.SpeciesDetailsViewModelFactory
 import com.banno.mpoland.fishapp.viewmodel.SpeciesListViewModelFactory
 import org.kodein.di.DI
 import org.kodein.di.DIAware
@@ -44,9 +39,7 @@ class MainActivity : ComponentActivity(), DIAware {
                 }
             }
         }
-        
     }
-
 }
 
 
@@ -57,23 +50,28 @@ fun NavGraphBuilder.speciesGraph(navController: NavController, repository:Specie
             SpeciesListScreen(
                 viewModelFactory = SpeciesListViewModelFactory(repository).create(),
                 onNavigateToDetailsScreen = { species ->
-                    navController.navigate("speciesDetailsScreen?speciesPath=${species.path}")
+                    navController.navigate("speciesDetailsScreen?speciesName=${species.speciesName}&speciesPath=${species.path}")
                 }
             )
         }
 
         composable(
-            route = "speciesDetailsScreen?speciesPath={speciesPath}",
-            arguments = listOf(navArgument("speciesPath") { nullable = true })
+            route = "speciesDetailsScreen?speciesName={speciesName}&speciesPath={speciesPath}",
+            arguments = listOf(
+                navArgument("speciesName") { type = NavType.StringType },
+                navArgument("speciesPath") { type = NavType.StringType }
+            )
         ) { backStackEntry ->
             backStackEntry.arguments?.getString("speciesPath")?.let { path ->
-                FishDetailsScreen(
+                SpeciesDetailsScreen(
+                    viewModelFactory = SpeciesDetailsViewModelFactory(repository).create(),
+                    speciesName = backStackEntry.arguments?.getString("speciesName") ?: "",
                     speciesPath = path
                 )
             }
         }
-    }
 
+    }
 }
 
 

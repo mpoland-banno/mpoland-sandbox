@@ -59,3 +59,10 @@ class SpeciesListViewModel(private val repository: SpeciesListRepository) : View
     }
 
 }
+
+
+data class SpeciesListUiStateHolder(
+    val speciesList: List<Species> = emptyList(),
+    val searchFilter: String = "",
+    val isLoading: Boolean = false
+)

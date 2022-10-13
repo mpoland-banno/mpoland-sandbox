@@ -23,19 +23,16 @@ import com.banno.mpoland.fishapp.viewmodel.SpeciesListUiStateHolder
 
 
 @Composable
-fun SpeciesList(state: SpeciesListUiStateHolder, onClickSpeciesRow: (Species) -> Unit = {}) {
+fun SpeciesList(speciesList:List<Species>, onClickSpeciesRow: (Species) -> Unit = {}) {
     LazyColumn(modifier = Modifier.fillMaxHeight()) {
-        itemsIndexed(items=state.speciesList) { index, item ->
+        itemsIndexed(items=speciesList) { index, item ->
             SpeciesListRow(item, onClickSpeciesRow)
-            if (index < state.speciesList.size) {
+            if (index < speciesList.size) {
                 Divider(thickness = 1.dp)
             }
         }
     }
 }
-
-
-typealias OnClickSpeciesRowFunc = (Species)->Unit
 
 class SpeciesListRowPreviewParameter : PreviewParameterProvider<Species> {
     override val values: Sequence<Species> = sequenceOf(
@@ -47,7 +44,7 @@ class SpeciesListRowPreviewParameter : PreviewParameterProvider<Species> {
 @Composable
 fun SpeciesListRow(
     @PreviewParameter(SpeciesListRowPreviewParameter::class) species: Species,
-    onClickSpeciesRow:OnClickSpeciesRowFunc = {}
+    onClickSpeciesRow: (Species)->Unit = {}
 ) {
     Row(
         Modifier

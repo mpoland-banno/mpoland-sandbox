@@ -5,8 +5,8 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 
 @Composable
-fun FishAppTitleBar() {
+fun FishAppTitleBar(text:String) {
     TopAppBar(
-        title={ Text("Fish App") }
+        title={ Text(text) }
     )
 }
