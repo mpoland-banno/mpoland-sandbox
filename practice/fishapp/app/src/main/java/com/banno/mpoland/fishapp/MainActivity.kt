@@ -60,10 +60,9 @@ fun NavGraphBuilder.speciesGraph(navController: NavController, repository:Specie
             )
         ) { backStackEntry ->
             backStackEntry.arguments?.getString("speciesPath")?.let { path ->
+                val speciesName = backStackEntry.arguments?.getString("speciesName") ?: ""
                 SpeciesDetailsScreen(
-                    viewModelFactory = SpeciesDetailsViewModelFactory(repository).create(),
-                    speciesName = backStackEntry.arguments?.getString("speciesName") ?: "",
-                    speciesPath = path
+                    viewModelFactory = SpeciesDetailsViewModelFactory(repository).create(path,speciesName),
                 )
             }
         }

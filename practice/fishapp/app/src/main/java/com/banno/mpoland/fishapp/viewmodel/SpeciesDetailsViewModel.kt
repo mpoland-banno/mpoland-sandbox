@@ -16,40 +16,72 @@ import kotlinx.coroutines.withContext
 
 
 class SpeciesDetailsViewModelFactory(private val repository: SpeciesListRepository) {
-    fun create() :  ViewModelProvider.Factory {
+    fun create(speciesPath:String, speciesName: String) :  ViewModelProvider.Factory {
         return viewModelFactory {
             initializer {
-                SpeciesDetailsViewModel(repository)
+                SpeciesDetailsViewModel(repository, speciesPath, speciesName)
             }
         }
     }
 }
 
 
-class SpeciesDetailsViewModel(private val repository: SpeciesListRepository) : ViewModel() {
+class SpeciesDetailsViewModel(
+    private val repository: SpeciesListRepository,
+    private val speciesPath:String,
+    private val speciesName:String
+) : ViewModel() {
 
-    val loadingState = mutableStateOf(LoadingState.Initial)
+    val loadingState = mutableStateOf<LoadingState>(LoadingState.Initializing(speciesName))
 
+    init {
+        loadSpeciesDetails()
+    }
 
-    fun loadSpeciesDetails(path:String) {
+    private fun loadSpeciesDetails() {
         // path data's jacked up right now ... munge it
-        val mungedPath = path.replace("/profiles", "/species")
-        loadingState.value = LoadingState.Loading
+        val mungedPath = speciesPath.replace("/profiles", "/species")
+
+        loadingState.value = LoadingState.Loading(speciesName)
 
         viewModelScope.launch {
+
             withContext(Dispatchers.IO) {
                 repository.getSpeciesDetails(mungedPath)
+            }.also {
+                loadingState.value = LoadingState.Loaded(it)
             }
+
         }
     }
+
+
+    fun getScreenTitle() : String {
+        return when (val loadingState = loadingState.value) {
+            is LoadingState.Initializing -> { loadingState.initialTitle }
+            is LoadingState.Loading -> { loadingState.initialTitle }
+            is LoadingState.Error.NotFound -> { loadingState.initialTitle }
+            is LoadingState.Loaded -> { loadingState.speciesDetails.speciesName }
+        }
+    }
+
+
+
+
+    sealed class LoadingState {
+        data class Initializing(val initialTitle:String) : LoadingState()
+
+        data class Loading(val initialTitle:String) : LoadingState()
+
+        data class Loaded(val speciesDetails:SpeciesDetails) : LoadingState()
+
+        sealed class Error() : LoadingState() {
+            data class NotFound(val initialTitle: String, val path:String, val message:String) : Error()
+        }
+    }
+
 }
 
 
 
-enum class LoadingState {
-    Initial,
-    Loading,
-    Loaded,
-    Error
-}
 
