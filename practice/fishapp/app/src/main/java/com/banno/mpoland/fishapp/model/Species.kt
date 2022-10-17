@@ -13,10 +13,11 @@ data class SpeciesDetails(
     val scientificName: String,
     val path: String,
     val speciesIllustrationPhoto: SpeciesImageData?,
-    val physicalDescription: String?,
-    val biology: String?,
 
-    val nutritionalDetails:SpeciesNutritionalDetails
+    val overviewDetails: SpeciesOverviewDetails,
+    val nutritionalDetails:SpeciesNutritionalDetails,
+    val eatinDetails: SpeciesEatinDetails,
+    val fisheryDetails: SpeciesFisheryDetails
 )
 
 
@@ -35,6 +36,26 @@ data class SpeciesNutritionalDetails(
     val sodium:String?,
     val totalSugars:String?
 )
+
+
+data class SpeciesOverviewDetails(
+    val location:String?,
+    val biology: String?,
+    val physicalDescription: String?,
+    val imageGallery:List<SpeciesImageData>
+)
+
+data class SpeciesEatinDetails(
+    val healthBenefits:String?,
+    val taste:String?,
+    val texture:String?
+)
+
+
+data class SpeciesFisheryDetails(
+    val quote:String?
+)
+
 
 
 

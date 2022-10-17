@@ -1,9 +1,6 @@
 package com.banno.mpoland.fishapp.network.model
 
-import com.banno.mpoland.fishapp.model.SpeciesDetails
-import com.banno.mpoland.fishapp.model.SpeciesImageData
-import com.banno.mpoland.fishapp.model.Species
-import com.banno.mpoland.fishapp.model.SpeciesNutritionalDetails
+import com.banno.mpoland.fishapp.model.*
 
 fun SpeciesNetworkModel.toDomain() : Species {
     return Species(
@@ -20,13 +17,18 @@ fun SpeciesDetailsNetworkModel.toDomain() : SpeciesDetails {
         scientificName,
         path,
         speciesIllustrationPhoto?.toDomain() ?: SpeciesImageData.DefaultImageData,
-        physicalDescription,
-        biology,
+
+        SpeciesOverviewDetails(location, biology, physicalDescription,
+            imageGallery?.map { it.toDomain() } ?: emptyList()),
 
         SpeciesNutritionalDetails(
             calories, carbohydrate, cholesterol, totalFat, totalDietaryFiber, protein,
             totalSaturatedFattyAcids, selenium, servingWeight, servings, sodium, totalSugars
-        )
+        ),
+
+        SpeciesEatinDetails(healthBenefits, taste, texture),
+
+        SpeciesFisheryDetails(quote)
     )
 }
 
