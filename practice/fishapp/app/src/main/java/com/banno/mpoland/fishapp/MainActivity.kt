@@ -7,7 +7,7 @@ import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.banno.mpoland.fishapp.repository.SpeciesListRepository
+import com.banno.mpoland.fishapp.repository.SpeciesRepository
 import com.banno.mpoland.fishapp.ui.SpeciesDetailsScreen
 import com.banno.mpoland.fishapp.ui.SpeciesListScreen
 import com.banno.mpoland.fishapp.ui.theme.FishAppTheme
@@ -21,7 +21,7 @@ import org.kodein.di.instance
 
 class MainActivity : ComponentActivity(), DIAware {
     override val di: DI by closestDI()
-    private val repository: SpeciesListRepository by instance()
+    private val repository: SpeciesRepository by instance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +42,7 @@ class MainActivity : ComponentActivity(), DIAware {
 }
 
 
-fun NavGraphBuilder.speciesGraph(navController: NavController, repository:SpeciesListRepository) {
+fun NavGraphBuilder.speciesGraph(navController: NavController, repository:SpeciesRepository) {
     navigation(startDestination = "speciesListScreen", route = "speciesRoot") {
         composable("speciesListScreen") {
             SpeciesListScreen(

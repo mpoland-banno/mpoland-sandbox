@@ -1,6 +1,5 @@
 package com.banno.mpoland.fishapp.viewmodel
 
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -8,14 +7,13 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.banno.mpoland.fishapp.model.SpeciesDetails
-import com.banno.mpoland.fishapp.repository.SpeciesListRepository
+import com.banno.mpoland.fishapp.repository.SpeciesRepository
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 
-class SpeciesDetailsViewModelFactory(private val repository: SpeciesListRepository) {
+class SpeciesDetailsViewModelFactory(private val repository: SpeciesRepository) {
     fun create(speciesPath:String, speciesName: String) :  ViewModelProvider.Factory {
         return viewModelFactory {
             initializer {
@@ -27,7 +25,7 @@ class SpeciesDetailsViewModelFactory(private val repository: SpeciesListReposito
 
 
 class SpeciesDetailsViewModel(
-    private val repository: SpeciesListRepository,
+    private val repository: SpeciesRepository,
     private val speciesPath:String,
     private val speciesName:String
 ) : ViewModel() {
