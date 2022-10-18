@@ -7,10 +7,12 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.banno.mpoland.fishapp.model.SpeciesDetails
+import com.banno.mpoland.fishapp.model.SpeciesImageData
 import com.banno.mpoland.fishapp.repository.SpeciesRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlin.concurrent.fixedRateTimer
 
 
 class SpeciesDetailsViewModelFactory(private val repository: SpeciesRepository) {
@@ -31,6 +33,7 @@ class SpeciesDetailsViewModel(
 ) : ViewModel() {
 
     val loadingState = mutableStateOf<LoadingState>(LoadingState.Initializing(speciesName))
+    val imageGalleryState = mutableStateOf(SpeciesImageGalleryStateHolder())
 
     init {
         loadSpeciesDetails()
@@ -43,16 +46,28 @@ class SpeciesDetailsViewModel(
         loadingState.value = LoadingState.Loading(speciesName)
 
         viewModelScope.launch {
-
             withContext(Dispatchers.IO) {
                 repository.getSpeciesDetails(mungedPath)
             }.also {
                 loadingState.value = LoadingState.Loaded(it)
-            }
 
+                imageGalleryState.value = imageGalleryState.value.copy(
+                    imageList = it.overviewDetails.imageGallery,
+                    indexToDisplay = 0
+                )
+
+                startImageGalleryTimer()
+            }
         }
     }
 
+    private fun startImageGalleryTimer() {
+        fixedRateTimer(initialDelay = 3000L, period = 3000L) {
+            imageGalleryState.value = imageGalleryState.value.copy(
+                indexToDisplay = (imageGalleryState.value.indexToDisplay + 1) % imageGalleryState.value.imageList.size
+            )
+        }
+    }
 
     fun getScreenTitle() : String {
         return when (val loadingState = loadingState.value) {
@@ -62,9 +77,6 @@ class SpeciesDetailsViewModel(
             is LoadingState.Loaded -> { loadingState.speciesDetails.speciesName }
         }
     }
-
-
-
 
     sealed class LoadingState {
         data class Initializing(val initialTitle:String) : LoadingState()
@@ -77,8 +89,18 @@ class SpeciesDetailsViewModel(
             data class NotFound(val initialTitle: String, val path:String, val message:String) : Error()
         }
     }
-
 }
+
+
+
+data class SpeciesImageGalleryStateHolder(
+    val imageList:List<SpeciesImageData> = emptyList(),
+    val indexToDisplay:Int = 0
+)
+
+
+
+
 
 
 
