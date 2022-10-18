@@ -40,14 +40,21 @@ class SpeciesDetailsViewModel(
     }
 
     private fun loadSpeciesDetails() {
-        // path data's jacked up right now ... munge it
-        val mungedPath = speciesPath.replace("/profiles", "/species")
-
         loadingState.value = LoadingState.Loading(speciesName)
 
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                repository.getSpeciesDetails(mungedPath)
+                //TODO: real error handling needed
+
+                try {
+                    // start with path (munged), then move to name (munged)
+                    val mungedPath = speciesPath.replace("/profiles", "/species")
+                    repository.getSpeciesDetails(mungedPath)
+                } catch (e:Exception) {
+                    val mungedName = "/species/" + speciesName.lowercase().trim().replace(" ", "-")
+                    repository.getSpeciesDetails(mungedName)
+                }
+                
             }.also {
                 loadingState.value = LoadingState.Loaded(it)
 
